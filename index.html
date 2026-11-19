@@ -1,0 +1,2164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>پنل مدیریت کاربران</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-page: #090b10;
+      --bg-card: #11151f;
+      --bg-soft: #171c29;
+      --border-dark: #252d3f;
+      --border-accent: #38bdf8;
+      --accent-primary: #38bdf8;
+      --accent-deep: #0284c7;
+      --accent-grad: linear-gradient(135deg, #22d3ee 0%, #6366f1 100%);
+      --accent-soft-bg: rgba(56, 189, 248, 0.14);
+      --text-main: #f3f6fc;
+      --text-muted: #9aa6bd;
+      --green-online: #22c55e;
+      --gray-dot: #64748b;
+      --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.45);
+      --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.7);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 9px;
+    }
+
+    body.light-contrast {
+      --bg-page: #0d1017;
+      --bg-card: #161b26;
+      --bg-soft: #1d2433;
+      --border-dark: #2d374d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 40px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .app-shell {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 14px 28px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-card);
+      transition: 0.2s ease;
+      font-size: 18px;
+    }
+
+    .icon-btn:hover {
+      border-color: var(--border-accent);
+      transform: translateY(-1px);
+    }
+
+    .brand-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-grad);
+      color: #fff;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+    }
+
+    .page-header-box {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn-add-dark {
+      background: var(--accent-grad);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.28);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: 0.2s ease;
+    }
+
+    .btn-add-dark:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+    }
+
+    .page-title-col {
+      text-align: right;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .help-circle-btn {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid var(--text-main);
+      background: transparent;
+      color: var(--text-main);
+      font-size: 12px;
+      font-weight: 800;
+      display: inline-grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .page-subtitle {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .stats-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-card);
+    }
+
+    .stat-num {
+      font-size: 32px;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text-main);
+    }
+
+    .stat-label-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .online-green-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--green-online);
+      display: inline-block;
+    }
+
+    .stat-icon {
+      color: var(--accent-primary);
+      font-size: 20px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .search-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      padding: 0 12px;
+      height: 44px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .search-wrap:focus-within {
+      border-color: var(--border-accent);
+    }
+
+    .search-wrap input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: var(--text-main);
+      padding-right: 8px;
+    }
+
+    .mini-btn {
+      width: 40px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 15px;
+      box-shadow: var(--shadow-card);
+      transition: 0.18s ease;
+      position: relative;
+    }
+
+    .mini-btn:hover,
+    .mini-btn.active {
+      border-color: var(--accent-primary);
+      background: var(--accent-soft-bg);
+      color: #7dd3fc;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 7px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+    }
+
+    .users-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 12px 10px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .users-header {
+      display: grid;
+      grid-template-columns: 30px 1.25fr 0.75fr 1fr 24px;
+      align-items: center;
+      padding: 6px 8px 12px;
+      border-bottom: 1px solid var(--border-dark);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .accent-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      justify-self: center;
+    }
+
+    .user-row-wrap {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .user-row-wrap:last-child {
+      border-bottom: none;
+    }
+
+    .user-row {
+      display: grid;
+      grid-template-columns: 30px 1.25fr 0.75fr 1fr 24px;
+      align-items: center;
+      padding: 14px 8px;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      border-radius: var(--radius-sm);
+    }
+
+    .user-row:hover,
+    .user-row.expanded-row {
+      background: var(--bg-soft);
+    }
+
+    .chevron-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .usage-text {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+    }
+
+    .status-wifi {
+      justify-self: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.14);
+      color: #22c55e;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+
+    .status-wifi.inactive {
+      background: rgba(100, 116, 139, 0.18);
+      color: #94a3b8;
+    }
+
+    .username-cell {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .online-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .online-dot.on {
+      background: var(--green-online);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18);
+    }
+
+    .online-dot.off {
+      background: var(--gray-dot);
+    }
+
+    .user-details {
+      display: none;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin: 0 6px 10px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      border: 1px solid var(--border-dark);
+    }
+
+    .user-details.open {
+      display: block;
+    }
+
+    .usage-progress-track {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.14);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .usage-progress-fill {
+      height: 100%;
+      background: var(--accent-grad);
+      border-radius: 999px;
+    }
+
+    .total-line {
+      text-align: left;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .text-actions-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .action-text-btn {
+      border: 1.5px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 7px 12px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.16s ease;
+    }
+
+    .action-text-btn:hover {
+      border-color: var(--accent-primary);
+      background: var(--accent-soft-bg);
+      color: #7dd3fc;
+    }
+
+    .action-text-btn.primary {
+      background: var(--accent-grad);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .action-text-btn.danger {
+      color: #fda4af;
+      border-color: rgba(244, 63, 94, 0.35);
+      background: rgba(190, 18, 60, 0.15);
+    }
+
+    .sub-link-box {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 10px 12px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sub-link-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #7dd3fc;
+      text-align: right;
+    }
+
+    .sub-link-url {
+      font-size: 12px;
+      color: var(--text-main);
+      background: var(--bg-soft);
+      border: 1px solid var(--border-dark);
+      border-radius: 8px;
+      padding: 8px 10px;
+      direction: ltr;
+      text-align: left;
+      word-break: break-all;
+      user-select: all;
+    }
+
+    .sub-link-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .meta-info-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .meta-row-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .user-code-tag {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+      direction: ltr;
+    }
+
+    .pagination-box {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .pager-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .page-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page-active {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--accent-soft-bg);
+      color: #7dd3fc;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+    }
+
+    .per-page-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+    }
+
+    .per-page-select {
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .footer-credit {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      direction: ltr;
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 14, 0.72);
+      display: none;
+      z-index: 1200;
+    }
+
+    .drawer-backdrop.open {
+      display: block;
+    }
+
+    .side-drawer {
+      width: 82%;
+      max-width: 340px;
+      height: 100%;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-dark);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow-y: auto;
+      box-shadow: var(--shadow-modal);
+    }
+
+    .drawer-header-card {
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      background: var(--bg-soft);
+    }
+
+    .drawer-section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 8px 6px;
+    }
+
+    .drawer-nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .drawer-nav-item {
+      width: 100%;
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .drawer-nav-item.active-nav {
+      background: var(--accent-soft-bg);
+      border-color: var(--accent-primary);
+      border-right: 4px solid var(--accent-primary);
+      color: #7dd3fc;
+    }
+
+    .drawer-nav-item.dark-solid-nav {
+      background: var(--bg-soft);
+      border-color: var(--border-dark);
+      color: var(--text-main);
+    }
+
+    .drawer-bottom-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      margin-bottom: 10px;
+    }
+
+    .circle-tool-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+    }
+
+    .github-star-pill {
+      margin-right: auto;
+      border: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .drawer-user-banner {
+      background: var(--accent-grad);
+      color: #fff;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 14, 0.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 16px 12px 32px;
+      overflow-y: auto;
+      z-index: 1300;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 470px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-dark);
+      border-radius: 22px;
+      box-shadow: var(--shadow-modal);
+      overflow: hidden;
+    }
+
+    .modal-top {
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .modal-close-x {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--accent-primary);
+      background: transparent;
+      font-size: 15px;
+      color: var(--accent-primary);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .modal-heading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 16px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field-label {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .input-with-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .gen-btn {
+      width: 38px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-dark);
+      background: var(--bg-soft);
+      color: var(--text-main);
+      cursor: pointer;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .dark-input,
+    .dark-select,
+    .dark-textarea {
+      width: 100%;
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      padding: 10px 13px;
+      font-size: 13.5px;
+      color: var(--text-main);
+      outline: none;
+      transition: 0.18s ease;
+    }
+
+    .dark-input:focus,
+    .dark-select:focus,
+    .dark-textarea:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+    }
+
+    .dark-textarea {
+      min-height: 112px;
+      resize: vertical;
+      direction: ltr;
+      text-align: left;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+
+    .quick-days {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .day-chip {
+      border: 1px solid var(--border-dark);
+      background: var(--bg-soft);
+      color: var(--text-muted);
+      border-radius: 9px;
+      padding: 5px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      direction: ltr;
+    }
+
+    .day-chip:hover,
+    .day-chip.selected {
+      background: var(--accent-soft-bg);
+      border-color: var(--accent-primary);
+      color: #7dd3fc;
+    }
+
+    .help-hint {
+      font-size: 11.5px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .accordion-box {
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      overflow: hidden;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: var(--bg-soft);
+      border: none;
+      padding: 13px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .accordion-content {
+      display: none;
+      padding: 0 14px 14px;
+      border-top: 1px solid var(--border-dark);
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .accordion-content.open {
+      display: block;
+    }
+
+    .groups-panel {
+      border: 1.5px solid var(--border-dark);
+      border-radius: 16px;
+      padding: 14px;
+      background: var(--bg-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .groups-title-pill {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 800;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid var(--accent-primary);
+      margin-bottom: 2px;
+    }
+
+    .group-option-row {
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      padding: 11px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-size: 13.5px;
+      font-weight: 700;
+      background: var(--bg-card);
+    }
+
+    .group-option-row.checked {
+      background: var(--accent-soft-bg);
+      border-color: var(--accent-primary);
+    }
+
+    .radio-accent {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: inline-block;
+    }
+
+    .radio-accent.dim {
+      opacity: 0.3;
+    }
+
+    .modal-footer {
+      padding: 14px 20px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid var(--border-dark);
+      background: var(--bg-card);
+      position: sticky;
+      bottom: 0;
+    }
+
+    .btn-create {
+      background: var(--accent-grad);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 24px;
+      font-size: 14.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.28);
+    }
+
+    .btn-cancel {
+      background: var(--bg-soft);
+      color: var(--text-main);
+      border: 1.5px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .sub-glass-backdrop {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(160deg, #070a10 0%, #0f172a 55%, #19132b 100%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow-y: auto;
+      z-index: 1500;
+    }
+
+    .sub-glass-backdrop.open {
+      display: flex;
+    }
+
+    .sub-glass-card {
+      width: 100%;
+      max-width: 410px;
+      border-radius: 26px;
+      padding: 24px 18px 22px;
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.65);
+      color: #ffffff;
+      position: relative;
+    }
+
+    .sub-glass-close {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .sub-hero-title {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      color: #6ef7ff;
+      text-shadow: 0 0 20px rgba(110, 247, 255, 0.3);
+      margin-bottom: 10px;
+    }
+
+    .sub-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 0 auto 18px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 13px;
+      font-weight: 700;
+      color: #d8f8ff;
+    }
+
+    .sub-hero-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .sub-profile-box {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .sub-user-meta {
+      text-align: right;
+    }
+
+    .sub-user-name {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 6px;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .sub-country-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #e9f5ff;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+
+    .sub-avatar-circle {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22d3ee, #6366f1);
+      display: grid;
+      place-items: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .sub-two-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .sub-stat-box {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+
+    .sub-stat-lbl {
+      font-size: 12px;
+      color: #cfe7ff;
+      margin-bottom: 8px;
+    }
+
+    .sub-stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #7ef9ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .sub-expire-box {
+      background: rgba(9, 13, 22, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 16px;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 13.5px;
+    }
+
+    .sub-expire-date {
+      font-weight: 800;
+      color: #ffffff;
+      direction: ltr;
+    }
+
+    .sub-validity-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 8px;
+      color: #e6f2ff;
+    }
+
+    .sub-validity-bar {
+      height: 6px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+      margin-bottom: 20px;
+    }
+
+    .sub-btn-download {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      background: linear-gradient(90deg, #22d3ee 0%, #6366f1 100%);
+      box-shadow: 0 10px 24px rgba(56, 189, 248, 0.28);
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .sub-btn-copy {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 16px;
+      padding: 13px 18px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .sub-hint-text {
+      text-align: center;
+      font-size: 12.5px;
+      color: #d6e4ff;
+      margin-bottom: 14px;
+    }
+
+    .sub-footer-brand {
+      text-align: center;
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.6);
+      direction: ltr;
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #1e293b;
+      border: 1px solid #38bdf8;
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+      z-index: 2000;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 400px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .users-header,
+      .user-row {
+        grid-template-columns: 24px 1.2fr 0.7fr 1.05fr 20px;
+      }
+      .page-title-row {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="top-bar">
+      <button class="icon-btn" id="menuToggleBtn" title="منو" aria-label="منو">☰</button>
+      <div class="brand-avatar" title="کاربر">👤</div>
+    </header>
+
+    <section class="page-header-box">
+      <button class="btn-add-dark" id="openAddUserModalBtn">＋ افزودن کاربر</button>
+      <div class="page-title-col">
+        <div class="page-title-row">
+          <button type="button" class="help-circle-btn" id="helpInfoBtn" title="راهنما">؟</button>
+          <span>کاربران</span>
+        </div>
+        <p class="page-subtitle">کنترل، بروزرسانی، و ترتیب حساب‌های کاربری — پروفایل وبگردی</p>
+      </div>
+    </section>
+
+    <section class="stats-stack">
+      <div class="stat-card">
+        <span class="stat-num" id="onlineUsersCount">0</span>
+        <div class="stat-label-wrap">
+          <span>کاربران آنلاین</span>
+          <span class="online-green-dot"></span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-num" id="activeUsersCount">0</span>
+        <div class="stat-label-wrap">
+          <span>کاربران فعال</span>
+          <span class="stat-icon">👤</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-num" id="totalUsersCount">0</span>
+        <div class="stat-label-wrap">
+          <span>کاربران</span>
+          <span class="stat-icon">👥</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="toolbar-row">
+      <button class="mini-btn" id="collapseAllBtn" title="بستن جزئیات">⌄</button>
+      <button class="mini-btn" id="refreshBtn" title="بروزرسانی لیست">↻</button>
+      <button class="mini-btn" id="columnsBtn" title="نمایش ستون‌ها">▥<span class="notif-dot"></span></button>
+      <button class="mini-btn" id="sortBtn" title="مرتب‌سازی">⇅</button>
+      <button class="mini-btn" id="filterStatusBtn" title="فیلتر فعال/غیرفعال">⧃</button>
+      <div class="search-wrap">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="جستجو" />
+      </div>
+    </div>
+
+    <section class="users-card">
+      <div class="users-header">
+        <span></span>
+        <span>مصرف داده</span>
+        <span style="text-align:center;">وضعیت</span>
+        <span style="text-align:right;">نام کاربری</span>
+        <span class="accent-dot"></span>
+      </div>
+      <div id="usersListContainer"></div>
+    </section>
+
+    <div class="pagination-box">
+      <div class="pager-row">
+        <button class="page-btn" id="prevPageBtn">&lt; قبلی</button>
+        <span class="page-active" id="currentPageBadge">1</span>
+        <button class="page-btn" id="nextPageBtn">بعدی &gt;</button>
+      </div>
+
+      <div class="per-page-row">
+        <span>تعداد در صفحه</span>
+        <select class="per-page-select" id="perPageSelect">
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+
+      <div class="footer-credit">
+        <span>Made with</span>
+        <span style="color:#38bdf8;">♥</span>
+        <span>by</span>
+        <strong>Panel</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- کشوی منو -->
+  <div class="drawer-backdrop" id="drawerBackdrop">
+    <aside class="side-drawer" onclick="event.stopPropagation()">
+      <div>
+        <div class="drawer-header-card">
+          <button type="button" class="icon-btn" id="closeDrawerBtn" style="width:32px;height:32px;font-size:14px;">✕</button>
+          <div class="brand-avatar" style="width:34px;height:34px;font-size:14px;">👤</div>
+        </div>
+
+        <div class="drawer-section-label">پلتفرم</div>
+        <div class="drawer-nav-list">
+          <button type="button" class="drawer-nav-item active-nav" id="drawerUsersBtn">
+            <span>کاربران</span>
+            <span>👥</span>
+          </button>
+          <button type="button" class="drawer-nav-item dark-solid-nav" id="drawerApiBtn">
+            <span>کلیدهای API</span>
+            <span>🔑</span>
+          </button>
+          <button type="button" class="drawer-nav-item dark-solid-nav" id="drawerSettingsBtn">
+            <span>تنظیمات</span>
+            <span>⚙</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" class="drawer-nav-item" id="drawerSupportBtn" style="margin-bottom:10px;">
+          <span>پشتیبانی از ما</span>
+          <span>🛟</span>
+        </button>
+
+        <div class="drawer-bottom-tools">
+          <button type="button" class="circle-tool-btn" id="themeToggleBtn" title="تغییر کنتراست">☾</button>
+          <button type="button" class="circle-tool-btn" id="langToggleBtn" title="زبان">文A</button>
+          <button type="button" class="github-star-pill" id="starBtn">
+            <span>★ Star</span>
+            <span id="starCount">2,854</span>
+          </button>
+        </div>
+
+        <div class="drawer-user-banner">
+          <span>⇅</span>
+          <div style="text-align:left;">
+            <div>panel_user</div>
+            <div style="font-size:11px;opacity:0.9;">0 B / 10000 GB</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- مودال افزودن کاربر -->
+  <div class="modal-backdrop" id="addUserModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-sheet">
+      <div class="modal-top">
+        <button type="button" class="modal-close-x" id="closeModalX" aria-label="بستن">✕</button>
+        <div class="modal-heading" id="modalTitle">
+          <span>👤+</span>
+          <span>افزودن کاربر</span>
+        </div>
+      </div>
+
+      <form id="addUserForm" class="modal-body">
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label" for="statusSelect">وضعیت</label>
+            <select id="statusSelect" class="dark-select">
+              <option value="active" selected>فعال</option>
+              <option value="inactive">غیرفعال</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="usernameInput">نام کاربری</label>
+            <div class="input-with-btn">
+              <button type="button" class="gen-btn" id="genUsernameBtn" title="تولید نام کاربری تصادفی">↻</button>
+              <input type="text" id="usernameInput" class="dark-input" placeholder="نام کاربری را وارد کنید" required />
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="dataLimitInput">حد مصرف داده</label>
+          <input type="text" id="dataLimitInput" class="dark-input" placeholder="حد مصرف داده" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">تاریخ پایان</label>
+          <div class="quick-days" id="quickDaysGroup">
+            <button type="button" class="day-chip" data-days="7">+7d</button>
+            <button type="button" class="day-chip" data-days="30">+1m</button>
+            <button type="button" class="day-chip" data-days="60">+2m</button>
+            <button type="button" class="day-chip" data-days="90">+3m</button>
+            <button type="button" class="day-chip" data-days="180">+6m</button>
+            <button type="button" class="day-chip" data-days="365">+1y</button>
+          </div>
+          <input type="date" id="expireDateInput" class="dark-input" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="hwidLimitInput">محدودیت شناسه سخت‌افزار</label>
+          <input type="text" id="hwidLimitInput" class="dark-input" placeholder="خالی = پیش‌فرض، ۰ = نامحدود" />
+          <p class="help-hint">
+            خالی = استفاده از سیاست پیش‌فرض. ۰ = نامحدود و معاف از شناسه سخت‌افزار، حتی زمانی که هدر شناسه سخت‌افزار الزامی شده باشد.
+          </p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="noteInput">توضیحات / کانفیگ کاربر (وبگردی)</label>
+          <textarea id="noteInput" class="dark-textarea" placeholder="توضیحات یا متن کانفیگ..."></textarea>
+        </div>
+
+        <div class="accordion-box">
+          <button type="button" class="accordion-trigger" id="proxyAccordionBtn">
+            <span>⌄</span>
+            <span>🔒 تنظیمات پروکسی</span>
+          </button>
+          <div class="accordion-content" id="proxyAccordionContent">
+            <div style="padding-top:10px; display:flex; flex-direction:column; gap:8px;">
+              <label style="display:flex; align-items:center; justify-content:space-between;">
+                <span>پروتکل پیش‌فرض</span>
+                <select id="protocolSelect" class="dark-select" style="width:170px; padding:6px 10px;">
+                  <option value="WireGuard" selected>WireGuard</option>
+                  <option value="VLESS">VLESS</option>
+                  <option value="VMess">VMess</option>
+                  <option value="Trojan">Trojan</option>
+                </select>
+              </label>
+              <label style="display:flex; align-items:center; justify-content:space-between;">
+                <span>شناسه / پورت</span>
+                <input type="text" id="proxyPortInput" class="dark-input" style="width:170px; padding:6px 10px;" value="54699" />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="groups-panel">
+          <div class="groups-title-pill">گروه‌ها</div>
+          <input type="text" id="groupSearchInput" class="dark-input" placeholder="🔍 جستجو گروه‌ها" />
+          <div id="groupsListBox" style="display:flex; flex-direction:column; gap:8px;"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn-create">ایجاد</button>
+          <button type="button" class="btn-cancel" id="cancelModalBtn">لغو</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- صفحه اشتراک وقتی لینک ساب باز شود -->
+  <div class="sub-glass-backdrop" id="subSubscriptionView" role="dialog" aria-modal="true">
+    <div class="sub-glass-card">
+      <button type="button" class="sub-glass-close" id="closeSubViewBtn" aria-label="بستن">✕</button>
+
+      <div class="sub-hero-center">
+        <div class="sub-hero-title">نت ملی</div>
+        <div class="sub-pill-badge">
+          <span>🛡</span>
+          <span>اشتراک وایرگارد — وبگردی</span>
+        </div>
+      </div>
+
+      <div id="subActiveContent">
+        <div class="sub-profile-box">
+          <div class="sub-user-meta">
+            <div class="sub-user-name" id="subViewUsername">User</div>
+            <div class="sub-country-tag">
+              <span>🌐</span>
+              <span>وبگردی (s6.pergas.top)</span>
+            </div>
+          </div>
+          <div class="sub-avatar-circle">👤</div>
+        </div>
+
+        <div class="sub-two-stats">
+          <div class="sub-stat-box">
+            <div class="sub-stat-lbl">زمان باقیمانده</div>
+            <div class="sub-stat-val">
+              <span id="subViewDaysLeft">30 روز</span>
+              <span>⏱</span>
+            </div>
+          </div>
+
+          <div class="sub-stat-box">
+            <div class="sub-stat-lbl">حجم کل</div>
+            <div class="sub-stat-val">
+              <span id="subViewTotalVolume">110 GB</span>
+              <span>📦</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-expire-box">
+          <span class="sub-expire-date" id="subViewExpireDate">2028/04/02</span>
+          <span style="color:#d6e4ff; font-weight:700;">تاریخ انقضا</span>
+        </div>
+
+        <div class="sub-validity-row">
+          <span style="font-weight:800; color:#7ef9ff;" id="subViewStatusText">فعال</span>
+          <span style="color:#d6e4ff;">وضعیت اعتبار</span>
+        </div>
+        <div class="sub-validity-bar"></div>
+
+        <button type="button" class="sub-btn-download" id="subGlassDownloadBtn">↓ دانلود کانفیگ (.conf)</button>
+        <button type="button" class="sub-btn-copy" id="subGlassCopySubBtn">📋 کپی لینک ساب</button>
+
+        <p class="sub-hint-text">برای افزودن به کلاینت، لینک ساب را کپی کنید</p>
+      </div>
+
+      <div id="subRevokedContent" style="display:none; text-align:center; padding:26px 10px;">
+        <div style="font-size:20px; font-weight:800; color:#fda4af; margin-bottom:10px;">این اشتراک حذف یا غیرفعال شده است</div>
+        <p style="font-size:13px; color:#e2e8f0; line-height:1.7;">لینک ساب و کانفیگ مربوط به این کاربر در پنل حذف شده‌اند و دیگر معتبر نیستند.</p>
+      </div>
+
+      <div class="sub-footer-brand">WireGuard Web Browsing Panel</div>
+    </div>
+  </div>
+
+  <div class="toast-msg" id="toastMsg">کپی شد</div>
+
+  <script>
+    const STORAGE_KEY = 'sobhan_panel_v11_web_browsing_wg';
+    [
+      'sobhan_pink_panel_users_v1', 'sobhan_clean_panel_v2', 'sobhan_panel_v3_clean',
+      'sobhan_panel_v4_text_actions', 'sobhan_panel_v5_sub_card', 'sobhan_panel_v6_real_sub_links',
+      'sobhan_panel_v7_dedicated_sub_link', 'sobhan_panel_v8_live_sub_link', 'sobhan_panel_v9_strict_delete_and_wg_group',
+      'sobhan_panel_v10_black_theme'
+    ].forEach(k => localStorage.removeItem(k));
+
+    const DEFAULT_WEB_CONFIG = `[Interface]
+Address = 192.168.169.172/24
+PrivateKey = sLLMnAEcCmwj547Lu4JygwJKHTrNg0zrzKnuJ+2nm3M=
+DNS = 8.8.8.8
+[Peer]
+PublicKey = EYxMTk1KCuJmQeEBIsLyaHylSKh2LEk/l0uAJa1FJjg=
+AllowedIPs = 0.0.0.0/0
+Endpoint = s6.pergas.top:54699
+PersistentKeepalive = 25`;
+
+    const availableGroups = ['وایرگارد'];
+
+    let state = {
+      users: loadUsers(),
+      search: '',
+      onlyActive: false,
+      sortAsc: true,
+      page: 1,
+      perPage: 10,
+      expandedId: null,
+      openSubBoxId: null,
+      selectedGroups: new Set(['وایرگارد'])
+    };
+
+    function showToast(msg) {
+      const el = document.getElementById('toastMsg');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 1800);
+    }
+
+    function copyText(text, msg = 'کپی شد') {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast(msg)).catch(() => fallbackCopy(text, msg));
+      } else {
+        fallbackCopy(text, msg);
+      }
+    }
+
+    function fallbackCopy(text, msg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast(msg);
+    }
+
+    function loadUsers() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveUsers() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.users));
+    }
+
+    function parseGbNumber(str) {
+      const m = String(str || '').match(/([\d.]+)\s*(GB|TB|MB)?/i);
+      if (!m) return 0;
+      const val = parseFloat(m[1]) || 0;
+      const unit = (m[2] || 'GB').toUpperCase();
+      if (unit === 'TB') return val * 1024;
+      if (unit === 'MB') return val / 1024;
+      return val;
+    }
+
+    function calcUsagePercent(usedStr, limitStr) {
+      const u = parseGbNumber(usedStr);
+      const l = parseGbNumber(limitStr);
+      if (!l) return 0;
+      return Math.min(100, Math.round((u / l) * 100));
+    }
+
+    function calcDaysLeftInfo(expireStr) {
+      if (!expireStr || expireStr === 'نامحدود') {
+        return { shortLabel: 'بدون تاریخ انقضا', daysLabel: '30 روز', formattedDate: '2028/04/02' };
+      }
+      const target = new Date(expireStr + 'T00:00:00');
+      if (isNaN(target.getTime())) {
+        return { shortLabel: expireStr, daysLabel: '30 روز', formattedDate: '2028/04/02' };
+      }
+      const diffDays = Math.max(0, Math.ceil((target.getTime() - Date.now()) / 86400000));
+      return {
+        shortLabel: diffDays > 0 ? `پایان در ${diffDays} روز` : 'منقضی شده',
+        daysLabel: diffDays > 0 ? `${diffDays} روز` : '0 روز',
+        formattedDate: expireStr.replace(/-/g, '/')
+      };
+    }
+
+    function getUserSubLink(user) {
+      const base = `${window.location.origin}${window.location.pathname}`;
+      return `${base}?sub=${encodeURIComponent(user.username)}&uid=${encodeURIComponent(user.id)}&code=${encodeURIComponent(user.code)}`;
+    }
+
+    function buildConfContent(user) {
+      if (user.note && user.note.trim()) {
+        return user.note.trim();
+      }
+      return DEFAULT_WEB_CONFIG;
+    }
+
+    function downloadUserConfigFromObj(user) {
+      if (!user) return;
+      const content = buildConfContent(user);
+      const fileName = `${user.username || 's6i116u172'}.conf`;
+
+      try {
+        const blob = new Blob([content], { type: 'application/octet-stream;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 300);
+        showToast(`دانلود ${fileName} آغاز شد`);
+      } catch {
+        const a = document.createElement('a');
+        a.href = 'data:application/octet-stream;charset=utf-8,' + encodeURIComponent(content);
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast(`دانلود ${fileName} آغاز شد`);
+      }
+    }
+
+    function downloadUserConfig(userId) {
+      const user = state.users.find(u => u.id === userId);
+      if (!user) {
+        showToast('کاربر یا کانفیگ حذف شده است');
+        return;
+      }
+      downloadUserConfigFromObj(user);
+    }
+
+    function copyUserPrimaryConfig(userId) {
+      const user = state.users.find(u => u.id === userId);
+      if (!user) {
+        showToast('کاربر حذف شده است');
+        return;
+      }
+      copyText(buildConfContent(user), 'کپی کانفیگ انجام شد');
+    }
+
+    const subSubscriptionView = document.getElementById('subSubscriptionView');
+
+    function openSubCardForUserId(userId) {
+      const user = state.users.find(u => String(u.id) === String(userId));
+      const activeBox = document.getElementById('subActiveContent');
+      const revokedBox = document.getElementById('subRevokedContent');
+
+      if (!user) {
+        activeBox.style.display = 'none';
+        revokedBox.style.display = 'block';
+        subSubscriptionView.classList.add('open');
+        return;
+      }
+
+      activeBox.style.display = 'block';
+      revokedBox.style.display = 'none';
+
+      const dayInfo = calcDaysLeftInfo(user.expire);
+      document.getElementById('subViewUsername').textContent = user.username;
+      document.getElementById('subViewDaysLeft').textContent = dayInfo.daysLabel;
+      document.getElementById('subViewTotalVolume').textContent = user.limit || '110 GB';
+      document.getElementById('subViewExpireDate').textContent = dayInfo.formattedDate;
+      document.getElementById('subViewStatusText').textContent = user.active ? 'فعال' : 'غیرفعال';
+
+      document.getElementById('subGlassDownloadBtn').onclick = () => downloadUserConfigFromObj(user);
+      document.getElementById('subGlassCopySubBtn').onclick = () => copyText(getUserSubLink(user), 'لینک ساب کپی شد');
+
+      subSubscriptionView.classList.add('open');
+    }
+
+    window.openSubCardById = function(userId) {
+      openSubCardForUserId(userId);
+    };
+
+    document.getElementById('closeSubViewBtn').addEventListener('click', () => {
+      subSubscriptionView.classList.remove('open');
+      const cleanUrl = `${window.location.origin}${window.location.pathname}`;
+      window.history.replaceState({}, '', cleanUrl);
+    });
+
+    subSubscriptionView.addEventListener('click', (e) => {
+      if (e.target === subSubscriptionView) {
+        subSubscriptionView.classList.remove('open');
+      }
+    });
+
+    (function checkIncomingSubUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const uid = params.get('uid');
+      if (uid) {
+        openSubCardForUserId(uid);
+      }
+    })();
+
+    function getFilteredUsers() {
+      const q = state.search.trim().toLowerCase();
+      let list = state.users.filter(u => {
+        const matchesSearch = !q || u.username.toLowerCase().includes(q) || (u.note && u.note.toLowerCase().includes(q));
+        const matchesStatus = !state.onlyActive || u.active;
+        return matchesSearch && matchesStatus;
+      });
+      list.sort((a, b) => state.sortAsc ? a.id - b.id : b.id - a.id);
+      return list;
+    }
+
+    function render() {
+      const filtered = getFilteredUsers();
+      const totalPages = Math.max(1, Math.ceil(filtered.length / state.perPage));
+      if (state.page > totalPages) state.page = totalPages;
+
+      const startIdx = (state.page - 1) * state.perPage;
+      const pageItems = filtered.slice(startIdx, startIdx + state.perPage);
+
+      const onlineCount = state.users.filter(u => u.online).length;
+      const activeCount = state.users.filter(u => u.active).length;
+
+      document.getElementById('onlineUsersCount').textContent = onlineCount;
+      document.getElementById('activeUsersCount').textContent = activeCount;
+      document.getElementById('totalUsersCount').textContent = state.users.length;
+      document.getElementById('currentPageBadge').textContent = state.page;
+      document.getElementById('prevPageBtn').disabled = state.page <= 1;
+      document.getElementById('nextPageBtn').disabled = state.page >= totalPages;
+
+      const container = document.getElementById('usersListContainer');
+      if (!pageItems.length) {
+        container.innerHTML = `<div style="padding:26px; text-align:center; color:var(--text-muted); font-size:13.5px;">هنوز کاربری ثبت نشده است.</div>`;
+        return;
+      }
+
+      container.innerHTML = pageItems.map(u => {
+        const isOpen = state.expandedId === u.id;
+        const isSubBoxOpen = state.openSubBoxId === u.id;
+        const pct = calcUsagePercent(u.used, u.limit);
+        const dayInfo = calcDaysLeftInfo(u.expire);
+        const subLink = getUserSubLink(u);
+
+        return `
+          <div class="user-row-wrap">
+            <div class="user-row ${isOpen ? 'expanded-row' : ''}" onclick="toggleExpand(${u.id})">
+              <button type="button" class="chevron-btn" aria-label="جزئیات">${isOpen ? '⌃' : '⌄'}</button>
+              <div class="usage-text">${escapeHtml(u.used)} / ${escapeHtml(u.limit)}</div>
+              <div class="status-wifi ${u.active ? '' : 'inactive'}" title="${u.active ? 'فعال' : 'غیرفعال'}">📶</div>
+              <div class="username-cell">
+                <span>${escapeHtml(u.username)}</span>
+                <span class="online-dot ${u.online ? 'on' : 'off'}" title="${u.online ? 'آنلاین' : 'آفلاین'}"></span>
+              </div>
+              <span></span>
+            </div>
+
+            <div class="user-details ${isOpen ? 'open' : ''}">
+              <div class="usage-progress-track">
+                <div class="usage-progress-fill" style="width:${pct}%;"></div>
+              </div>
+
+              <div class="total-line">مجموع: ${escapeHtml(u.used)}</div>
+
+              <div class="text-actions-grid" onclick="event.stopPropagation()">
+                <button type="button" class="action-text-btn" onclick="downloadUserConfig(${u.id})">دانلود</button>
+                <button type="button" class="action-text-btn primary" onclick="toggleSubLinkBox(${u.id})">لینک ساب</button>
+                <button type="button" class="action-text-btn" onclick="toggleUserActive(${u.id})">${u.active ? 'غیرفعال کردن' : 'فعال کردن'}</button>
+                <button type="button" class="action-text-btn danger" onclick="deleteUser(${u.id})">حذف کاربر</button>
+                <button type="button" class="action-text-btn" onclick="copyUserPrimaryConfig(${u.id})">کپی کانفیگ</button>
+              </div>
+
+              ${isSubBoxOpen ? `
+                <div class="sub-link-box" onclick="event.stopPropagation()">
+                  <div class="sub-link-label">لینک ساب ${escapeHtml(u.username)}</div>
+                  <div class="sub-link-url">${escapeHtml(subLink)}</div>
+                  <div class="sub-link-buttons">
+                    <button type="button" class="action-text-btn" onclick="openSubCardById(${u.id})">باز کردن لینک</button>
+                    <button type="button" class="action-text-btn primary" onclick="copyText('${escapeJs(subLink)}', 'لینک ساب کپی شد')">کپی لینک ساب</button>
+                  </div>
+                </div>
+              ` : ''}
+
+              <div class="meta-info-stack">
+                <div class="meta-row-item">
+                  <span>${escapeHtml(dayInfo.shortLabel)}</span>
+                  <span>🕒</span>
+                </div>
+                <div class="meta-row-item">
+                  <span>${u.online ? 'متصل است' : 'هنوز متصل نشده'}</span>
+                  <span>📱</span>
+                </div>
+                <div class="user-code-tag">#${escapeHtml(u.code)}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escapeJs(str) {
+      return String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    }
+
+    window.toggleExpand = function(id) {
+      state.expandedId = state.expandedId === id ? null : id;
+      render();
+    };
+
+    window.toggleSubLinkBox = function(id) {
+      state.openSubBoxId = state.openSubBoxId === id ? null : id;
+      render();
+    };
+
+    window.toggleUserActive = function(id) {
+      state.users = state.users.map(u => u.id === id ? { ...u, active: !u.active } : u);
+      saveUsers();
+      render();
+      showToast('وضعیت کاربر تغییر کرد');
+    };
+
+    window.deleteUser = function(id) {
+      state.users = state.users.filter(u => u.id !== id);
+      if (state.expandedId === id) state.expandedId = null;
+      if (state.openSubBoxId === id) state.openSubBoxId = null;
+      saveUsers();
+      render();
+      showToast('کاربر، کانفیگ و لینک ساب حذف شدند');
+    };
+
+    window.downloadUserConfig = downloadUserConfig;
+    window.copyUserPrimaryConfig = copyUserPrimaryConfig;
+    window.copyText = copyText;
+
+    const drawerBackdrop = document.getElementById('drawerBackdrop');
+    document.getElementById('menuToggleBtn').addEventListener('click', () => drawerBackdrop.classList.add('open'));
+    document.getElementById('closeDrawerBtn').addEventListener('click', () => drawerBackdrop.classList.remove('open'));
+    drawerBackdrop.addEventListener('click', () => drawerBackdrop.classList.remove('open'));
+
+    document.getElementById('drawerUsersBtn').addEventListener('click', () => drawerBackdrop.classList.remove('open'));
+    document.getElementById('drawerApiBtn').addEventListener('click', () => {
+      drawerBackdrop.classList.remove('open');
+      showToast('بخش کلیدهای API آماده است');
+    });
+    document.getElementById('drawerSettingsBtn').addEventListener('click', () => {
+      drawerBackdrop.classList.remove('open');
+      showToast('بخش تنظیمات آماده است');
+    });
+    document.getElementById('drawerSupportBtn').addEventListener('click', () => {
+      drawerBackdrop.classList.remove('open');
+      showToast('پشتیبانی');
+    });
+    document.getElementById('helpInfoBtn').addEventListener('click', () => {
+      showToast('کانفیگ پیش‌فرض وبگردی روی مودال قرار گرفته است');
+    });
+
+    document.getElementById('themeToggleBtn').addEventListener('click', function () {
+      document.body.classList.toggle('light-contrast');
+      showToast('حالت تیرگی تغییر کرد');
+    });
+
+    document.getElementById('langToggleBtn').addEventListener('click', () => {
+      showToast('زبان فعلی: فارسی (FA)');
+    });
+
+    let starred = false;
+    document.getElementById('starBtn').addEventListener('click', () => {
+      starred = !starred;
+      document.getElementById('starCount').textContent = starred ? '2,855' : '2,854';
+      showToast(starred ? 'ثبت شد ★' : 'لغو شد');
+    });
+
+    function renderGroups(filterText = '') {
+      const box = document.getElementById('groupsListBox');
+      const q = filterText.trim().toLowerCase();
+      const visibleGroups = availableGroups.filter(g => !q || g.toLowerCase().includes(q));
+
+      if (!visibleGroups.length) {
+        box.innerHTML = `<div style="text-align:center; font-size:12.5px; color:var(--text-muted); padding:6px;">گروهی یافت نشد</div>`;
+        return;
+      }
+
+      box.innerHTML = visibleGroups.map(g => {
+        const checked = state.selectedGroups.has(g);
+        return `
+          <div class="group-option-row ${checked ? 'checked' : ''}" onclick="toggleGroupSelection('${escapeHtml(g)}')">
+            <span class="radio-accent ${checked ? '' : 'dim'}"></span>
+            <span>${escapeHtml(g)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.toggleGroupSelection = function(groupName) {
+      if (state.selectedGroups.has(groupName)) {
+        state.selectedGroups.delete(groupName);
+      } else {
+        state.selectedGroups.add(groupName);
+      }
+      renderGroups(document.getElementById('groupSearchInput').value);
+    };
+
+    const addUserModal = document.getElementById('addUserModal');
+
+    function openAddModal() {
+      const noteEl = document.getElementById('noteInput');
+      if (!noteEl.value.trim()) {
+        noteEl.value = DEFAULT_WEB_CONFIG;
+      }
+      const userEl = document.getElementById('usernameInput');
+      if (!userEl.value.trim()) {
+        userEl.value = 's6i116u172';
+      }
+      addUserModal.classList.add('open');
+      renderGroups(document.getElementById('groupSearchInput').value);
+      userEl.focus();
+    }
+
+    function closeAddModal() {
+      addUserModal.classList.remove('open');
+    }
+
+    document.getElementById('openAddUserModalBtn').addEventListener('click', openAddModal);
+    document.getElementById('closeModalX').addEventListener('click', closeAddModal);
+    document.getElementById('cancelModalBtn').addEventListener('click', closeAddModal);
+
+    addUserModal.addEventListener('click', (e) => {
+      if (e.target === addUserModal) closeAddModal();
+    });
+
+    document.getElementById('genUsernameBtn').addEventListener('click', () => {
+      const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let name = '';
+      for (let i = 0; i < 8; i++) {
+        name += chars[Math.floor(Math.random() * chars.length)];
+      }
+      document.getElementById('usernameInput').value = name;
+    });
+
+    document.querySelectorAll('.day-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+        const days = Number(chip.dataset.days);
+        const target = new Date(Date.now() + days * 86400000);
+        const yyyy = target.getFullYear();
+        const mm = String(target.getMonth() + 1).padStart(2, '0');
+        const dd = String(target.getDate()).padStart(2, '0');
+        document.getElementById('expireDateInput').value = `${yyyy}-${mm}-${dd}`;
+      });
+    });
+
+    document.getElementById('proxyAccordionBtn').addEventListener('click', () => {
+      document.getElementById('proxyAccordionContent').classList.toggle('open');
+    });
+
+    document.getElementById('groupSearchInput').addEventListener('input', (e) => {
+      renderGroups(e.target.value);
+    });
+
+    document.getElementById('addUserForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('usernameInput').value.trim();
+      if (!username) return;
+
+      const isActive = document.getElementById('statusSelect').value === 'active';
+      const rawLimit = document.getElementById('dataLimitInput').value.trim();
+      const limit = rawLimit
+        ? (rawLimit.toUpperCase().includes('GB') || rawLimit.toUpperCase().includes('TB') || rawLimit.toUpperCase().includes('MB')
+          ? rawLimit
+          : `${rawLimit} GB`)
+        : '110 GB';
+      const expireVal = document.getElementById('expireDateInput').value || '2028-04-02';
+      const hwidVal = document.getElementById('hwidLimitInput').value.trim() || 'پیش‌فرض';
+      const noteVal = document.getElementById('noteInput').value.trim() || DEFAULT_WEB_CONFIG;
+      const protocolVal = document.getElementById('protocolSelect').value;
+      const selectedGroupNames = Array.from(state.selectedGroups);
+
+      const newUser = {
+        id: Date.now(),
+        code: String(Math.floor(10000 + Math.random() * 89999)),
+        username,
+        used: '0 B',
+        limit,
+        active: isActive,
+        online: false,
+        expire: expireVal,
+        hwid: hwidVal,
+        note: noteVal,
+        protocol: protocolVal,
+        group: selectedGroupNames.length ? selectedGroupNames.join('، ') : 'وایرگارد'
+      };
+
+      state.users.unshift(newUser);
+      saveUsers();
+      e.target.reset();
+      document.getElementById('noteInput').value = DEFAULT_WEB_CONFIG;
+      document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('selected'));
+      closeAddModal();
+      render();
+      showToast('کاربر وبگردی ایجاد شد');
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      state.search = e.target.value;
+      state.page = 1;
+      render();
+    });
+
+    document.getElementById('filterStatusBtn').addEventListener('click', function () {
+      state.onlyActive = !state.onlyActive;
+      this.classList.toggle('active', state.onlyActive);
+      state.page = 1;
+      render();
+    });
+
+    document.getElementById('sortBtn').addEventListener('click', function () {
+      state.sortAsc = !state.sortAsc;
+      this.classList.toggle('active', !state.sortAsc);
+      render();
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      state.users = loadUsers();
+      render();
+      showToast('بروزرسانی شد');
+    });
+
+    document.getElementById('collapseAllBtn').addEventListener('click', () => {
+      state.expandedId = null;
+      state.openSubBoxId = null;
+      render();
+    });
+
+    document.getElementById('prevPageBtn').addEventListener('click', () => {
+      if (state.page > 1) {
+        state.page--;
+        render();
+      }
+    });
+
+    document.getElementById('nextPageBtn').addEventListener('click', () => {
+      state.page++;
+      render();
+    });
+
+    document.getElementById('perPageSelect').addEventListener('change', (e) => {
+      state.perPage = Number(e.target.value);
+      state.page = 1;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
